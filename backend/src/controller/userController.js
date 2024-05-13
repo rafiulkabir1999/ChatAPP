@@ -36,7 +36,7 @@ const getAllUser = async (req, res) => {
       page > 1 ? `http://localhost:4000/user?page=${page - 1}` : null;
     res.json({
       name: "get all user from collection",
-      data: data,
+      data: data.reverse(),
       info: {
         totalCount,
         currentpage: page,
@@ -53,38 +53,29 @@ const getAllUser = async (req, res) => {
 };
 
 const registerUser = async (req, res) => {
+  let { name, email, password, dob, gender } = req.body;
   try {
-    let { name, email, password, dob, gender } = req.body;
-    try {
-      const check_user = await userModel.findOne({ email: email }); // Finding user by email
-      if (!check_user) {
-        bcrypt.hash(password, 10, async function (err, hash) {
-          if (err) {
-            throw err;
-          }
-          const newUser = new userModel({
-            name: name,
-            email: email,
-            password: hash,
-            gender: gender,
-            dob: new Date(dob),
-          });
-          const savedUser = await newUser.save();
-          res.send("User registration done");
+    const check_user = await userModel.findOne({ email: email }); // Finding user by email
+    if (!check_user) {
+      bcrypt.hash(password, 10, async function (err, hash) {
+        if (err) {
+          throw err;
+        }
+        const newUser = new userModel({
+          name: name,
+          email: email,
+          password: hash,
+          gender: gender,
+          dob: new Date(dob),
         });
-      } else {
-        res.send({
-          message: "User already exists with this email",
-        });
-      }
-    } catch (error) {
-      // Handle any errors that occur during this process
-      console.error("Error occurred:", error);
-      res.status(500).send("Internal Server Error");
+        const savedUser = await newUser.save();
+        return res.status(200).send("User Successfully registered"); // Return statement added
+      });
+    } else {
+      return res.status(409).send("User already exists with this email"); // Return statement added
     }
   } catch (error) {
-    // Handle any errors that occur during this process
-    console.error("Error occurred:", error);
+    return res.status(500).send("Internal Server Error");
   }
 };
 
