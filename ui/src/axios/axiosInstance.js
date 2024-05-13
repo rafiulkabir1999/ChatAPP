@@ -11,7 +11,7 @@ instance.interceptors.request.use(
     // if (token) {
     //   config.headers.Authorization = `Bearer ${token}`;
     // }
-    // config.headers['Content-Type'] = 'application/json';
+    config.headers["Content-Type"] = "application/json";
     //config.XCSRFToken = "X-CSRF-Token";
     //config.xsrfHeaderName = "X-CSRF-Token";
     return config;

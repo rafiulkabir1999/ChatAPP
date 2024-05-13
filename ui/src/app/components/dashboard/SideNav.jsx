@@ -1,4 +1,8 @@
-import { faPersonRifle, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faDashboard,
+  faPersonRifle,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import Link from "next/link";
@@ -9,8 +13,9 @@ function SideNav() {
       <hr />
 
       <div className="flex flex-col p-6">
-        <User icon={faUser} name="user" url="/user/admin" />
-        <User icon={faPersonRifle} name="Profile" url="/user/profile" />
+        <User icon={faDashboard} name="Dashboard" url="/admin/" />
+        <User icon={faUser} name="User List" url="/admin/user" />
+        <User icon={faPersonRifle} name="Profile" url="/admin/profile" />
       </div>
     </div>
   );

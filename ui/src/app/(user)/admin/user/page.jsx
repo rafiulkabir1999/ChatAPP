@@ -8,7 +8,7 @@ async function Dashboard({ searchParams }) {
   const tableHead = [
     "Name",
     "Email",
-    "Phone",
+    "Created",
     "Date of Birth",
     "Gender",
     "Action",
@@ -21,10 +21,10 @@ async function Dashboard({ searchParams }) {
   //console.log("data", data?.data);
 
   return (
-    <div className="p-6 bg-primary min-h-screen space-y-3">
+    <div className="p-6 bg-gray-200 min-h-screen space-y-3">
       <div className="flex justify-between items-center">
         <p className="text-secondery">User List</p>
-        <Create url={`/user/create`} />
+        <Create url={`/admin/user/create`} />
       </div>
       <div className="table text-secondery w-full">
         {/* <table className="w-full shadow p-4">
@@ -47,7 +47,7 @@ async function Dashboard({ searchParams }) {
             </tr>
           </tbody>
         </table> */}
-        <Table tableHead={tableHead} data={data?.data} />
+        {data && <Table tableHead={tableHead} data={data?.data} />}
         <div className="p-6 ">
           <Pagination data={data?.data?.info} />
         </div>

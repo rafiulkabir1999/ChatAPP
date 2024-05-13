@@ -1,7 +1,6 @@
 import React from "react";
-import Sidenav from "../components/Sidenav";
-import Chatbox from "../components/Chatbox";
-import Infobox from "../components/Infobox";
+import Sidenav from "@/app/components/Sidenav";
+import Chatbox from "@/app/components/Chatbox";
 function Page() {
   return (
     <div className="flex">
@@ -10,5 +9,4 @@ function Page() {
     </div>
   );
 }
-
 export default Page;
