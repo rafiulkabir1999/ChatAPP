@@ -53,7 +53,7 @@ const getAllUser = async (req, res) => {
 };
 
 const registerUser = async (req, res) => {
-  let { name, email, password, dob, gender } = req.body;
+  let { name, email, password, role, dob, gender } = req.body;
   try {
     const check_user = await userModel.findOne({ email: email }); // Finding user by email
     if (!check_user) {
@@ -67,6 +67,7 @@ const registerUser = async (req, res) => {
           password: hash,
           gender: gender,
           dob: new Date(dob),
+          role: role,
         });
         const savedUser = await newUser.save();
         return res.status(200).send("User Successfully registered"); // Return statement added
