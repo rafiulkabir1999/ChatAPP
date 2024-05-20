@@ -33,6 +33,8 @@ function Login() {
             localStorage.setItem("token", response?.data?.token);
             document.cookie =
               "token=" + (response?.data?.token || "") + "; path=/";
+            document.cookie =
+              "type=" + (response?.data?.type || "") + "; path=/";
           }
           toast.success("Login success");
           fetchUser();

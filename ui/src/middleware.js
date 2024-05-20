@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 export const middleware = (request) => {
   const pathVaiable = request.nextUrl.pathname;
-
+  const type = request.cookies.get("type");
   const authentication = [
     // "/registration",
     // "/update-password",
@@ -18,6 +18,10 @@ export const middleware = (request) => {
     }*/
 
   if (!auth && pathVaiable.startsWith("/chat")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (type?.value !== "admin" && pathVaiable.startsWith("/admin")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 };

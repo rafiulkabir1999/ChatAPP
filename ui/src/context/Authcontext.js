@@ -48,7 +48,6 @@ export const AuthProvider = ({ children }) => {
   const fetchUser = async () => {
     try {
       const response = await axios.get("auth");
-      console.log("user data fetch", response.data);
       if (response.data) {
         setUser({
           name: response?.data?.name,
@@ -61,6 +60,7 @@ export const AuthProvider = ({ children }) => {
     try {
       localStorage.removeItem("token");
       document.cookie = "token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+      document.cookie = "type=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
       router.refresh();
       toast.success("Log out Successfull");
     } catch (error) {

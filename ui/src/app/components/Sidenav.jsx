@@ -7,6 +7,7 @@ import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { useAuth } from "@/context/Authcontext";
+import Link from "next/link";
 
 function Sidenav() {
   const { user } = useAuth();
@@ -74,7 +75,10 @@ function Sidenav() {
 
 const MessageList = ({ name, lastsms, messagenumber, time }) => {
   return (
-    <div className="flex gap-2  p-4 group hover:bg-action cursor-pointer">
+    <Link
+      href={"/chat/12314"}
+      className="flex gap-2  p-4 group hover:bg-action cursor-pointer"
+    >
       <div className="">
         <div className="w-10 h-10 p-2 block bg-red-500 relative rounded-full overflow-hidden">
           <Image src={profile} fill alt="profile image" className="" />
@@ -96,7 +100,7 @@ const MessageList = ({ name, lastsms, messagenumber, time }) => {
           {messagenumber}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
