@@ -7,10 +7,13 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
-    //const token = localStorage.getItem("token"); // Get the token from localStorage or wherever it's stored
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
+    const token =
+      typeof localStorage !== "undefined"
+        ? localStorage.getItem("token")
+        : null;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     config.headers["Content-Type"] = "application/json";
     //config.XCSRFToken = "X-CSRF-Token";
     //config.xsrfHeaderName = "X-CSRF-Token";
@@ -27,7 +30,7 @@ instance.interceptors.response.use(
   },
   (error) => {
     if (error) {
-      if (error.response.status === 401) {
+      if (error?.response?.status === 401) {
         if (error.response.data.message === "Unauthenticated.") {
           //destroyCookie(null, "token");
           //destroyCookie(undefined, "token");
@@ -42,15 +45,15 @@ instance.interceptors.response.use(
           }
         }
       } else {
-        if (error.response.data.errors) {
+        if (error?.response?.data?.errors) {
           for (let key in error.response.data.errors) {
             //toast.warning(key + " " + error.response.data.errors[key]);
           }
         }
-        if (error.response.data.message) {
+        if (error?.response?.data?.message) {
           //toast.warning(error.response.data.message);
         }
-        console.log(error.response.data.errors);
+        console.log(error?.response?.data?.errors);
       }
       return Promise.reject(error);
     }

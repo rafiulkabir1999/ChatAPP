@@ -2,6 +2,8 @@ import { Inter } from "next/font/google";
 import "../globals.css";
 import SidenavDashboard from "../components/dashboard/SideNav";
 import { Toaster } from "react-hot-toast";
+import { AuthProvider } from "@/context/Authcontext";
+import Navbar from "../components/dashboard/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,11 +16,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} w-full flex`}>
-        <SidenavDashboard />
-        <div className="w-full">
-          <div className="bg-primary h-16 w-full shadow-md border text-red-500"></div>
-          <div>{children}</div>
-        </div>
+        <AuthProvider>
+          <SidenavDashboard />
+          <div className="w-full">
+            <Navbar />
+            <div>{children}</div>
+          </div>
+        </AuthProvider>
         <Toaster />
       </body>
     </html>

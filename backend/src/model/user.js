@@ -18,6 +18,10 @@ const UserScheme = mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    default: "user",
+  },
   dob: {
     type: Date,
     required: true,

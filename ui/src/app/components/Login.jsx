@@ -1,11 +1,17 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import { useState } from "react";
+import axios from "@/axios/axiosInstance";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/Authcontext";
 
 function Login() {
+  const router = useRouter();
+  const { fetchUser } = useAuth();
   const [user, setUser] = useState({
-    name: null,
+    email: null,
     password: null,
   });
 
@@ -16,9 +22,27 @@ function Login() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(user);
+    try {
+      const response = await axios.post("/auth", user);
+      if (response) {
+        console.log(response);
+        if (response.status === 200) {
+          if (window !== "undefined") {
+            localStorage.setItem("token", response?.data?.token);
+            document.cookie =
+              "token=" + (response?.data?.token || "") + "; path=/";
+          }
+          toast.success("Login success");
+          fetchUser();
+          router.push("/chat");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
   };
   return (
     <div className="w-72 bg-primary rounded-xl p-8 shadow-2xl">
@@ -28,14 +52,14 @@ function Login() {
         <form action="" onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col gap-1">
             <label htmlFor="" className="text-secondery text-xs font-bold">
-              Name
+              Email
             </label>
             <input
-              type="text"
+              type="email"
               className="p-2 border border-secondery rounded-xl  text-secondery text-sm outline-action"
               placeholder="Email or Name "
-              name="name"
-              value={user.name || ""}
+              name="email"
+              value={user.email || ""}
               onChange={handleChange}
             />
           </div>

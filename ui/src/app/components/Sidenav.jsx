@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import profile from "@public/image/profile-1.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -5,8 +6,11 @@ import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
+import { useAuth } from "@/context/Authcontext";
 
 function Sidenav() {
+  const { user } = useAuth();
+  // console.log("user name", user);
   return (
     <div className="w-72 bg-[#2B2D42] fixed h-screen">
       <div className="flex px-6 pt-4 pb-2 items-center gap-2">
@@ -19,8 +23,8 @@ function Sidenav() {
           />
         </div>
         <div className="flex flex-col grow text-sm">
-          <h1>Gravid Cristofer</h1>
-          <h1>Serion Developer</h1>
+          <h1>{user?.name}</h1>
+          <h1>{user?.email}</h1>
         </div>
 
         <span className="size-4 text-primary">

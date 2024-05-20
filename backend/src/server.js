@@ -1,5 +1,6 @@
 const express = require("express");
 const userRouter = require("./router/user.js");
+const authRouter = require("./router/authRouter.js");
 const { ConnectMongoDB } = require("./config/bdConfig.js");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -12,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //accept application/json
 app.use(bodyParser.json());
 
+app.use("/auth", authRouter);
 app.use("/user", userRouter);
 
 app.listen(4000, () => {

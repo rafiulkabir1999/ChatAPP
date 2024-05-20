@@ -27,26 +27,6 @@ async function Dashboard({ searchParams }) {
         <Create url={`/admin/user/create`} />
       </div>
       <div className="table text-secondery w-full">
-        {/* <table className="w-full shadow p-4">
-          <thead className="bg-secondery text-primary text-sm">
-            <th className="p-2 text-left">Name</th>
-            <th className="p-2 text-left">Email</th>
-            <th className="p-2">Phone</th>
-            <th className="p-2 text-left">Date of Birth</th>
-            <th className="p-2 text-left">Gender</th>
-            <th className="p-2 ">Action</th>
-          </thead>
-          <tbody>
-            <tr className="border">
-              <td className="px-2 p-2 border">name</td>
-              <td className="px-2 border">email</td>
-              <td className="text-center">Phone</td>
-              <td className="px-2 border">dateof Birth</td>
-              <td className="px-2 border">Gender</td>
-              <td className="px-2 border">Action</td>
-            </tr>
-          </tbody>
-        </table> */}
         {data && <Table tableHead={tableHead} data={data?.data} />}
         <div className="p-6 ">
           <Pagination data={data?.data?.info} />
