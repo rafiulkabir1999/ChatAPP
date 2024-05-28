@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import profile from "@public/image/profile-1.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
@@ -8,10 +8,24 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { useAuth } from "@/context/Authcontext";
 import Link from "next/link";
-
+import axios from "@/axios/axiosInstance";
 function Sidenav() {
   const { user } = useAuth();
-  // console.log("user name", user);
+  const [friend, setFrind] = useState();
+  console.log(friend);
+  const fetchFriend = async () => {
+    try {
+      const response = await axios.get("user");
+      if (response) {
+        setFrind(response?.data?.data);
+      }
+    } catch (error) {}
+  };
+  useEffect(() => {
+    fetchFriend();
+
+    //setFrind(response?.data);
+  }, []);
   return (
     <div className="w-72 bg-[#2B2D42] fixed h-screen">
       <div className="flex px-6 pt-4 pb-2 items-center gap-2">
@@ -44,8 +58,18 @@ function Sidenav() {
           </div>
         </div>
       </div>
-
-      <MessageList
+      {friend?.map((item, key) => {
+        return (
+          <MessageList
+            name={item?.name}
+            lastsms="where are you"
+            url={item?._id}
+            messagenumber={1}
+            time={`3:50`}
+          />
+        );
+      })}
+      {/* <MessageList
         name="Nahid Ul Kabir"
         lastsms="where are you"
         messagenumber={1}
@@ -68,15 +92,15 @@ function Sidenav() {
         lastsms="where are you"
         messagenumber={1}
         time={`3:50`}
-      />
+      /> */}
     </div>
   );
 }
 
-const MessageList = ({ name, lastsms, messagenumber, time }) => {
+const MessageList = ({ name, lastsms, messagenumber, time, url }) => {
   return (
     <Link
-      href={"/chat/12314"}
+      href={`/chat/${url}`}
       className="flex gap-2  p-4 group hover:bg-action cursor-pointer"
     >
       <div className="">

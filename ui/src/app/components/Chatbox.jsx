@@ -1,23 +1,49 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Infobox from "./Infobox";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { io } from "socket.io-client";
 import { useAuth } from "@/context/Authcontext";
+import { usePathname, useRouter } from "next/navigation";
+
 function Chatbox() {
   const { user } = useAuth();
-  const [message, setMessage] = React.useState();
-  const [inbox, setInbox] = React.useState([]);
-  const [room, setRoom] = React.useState();
-  console.log(room);
-  const [socket, setSocket] = useState(undefined);
 
-  useEffect(() => setRoom(user?.email));
+  const router = usePathname();
+
+  const [inbox, setInbox] = React.useState([]);
+  const [room, setRoom] = React.useState("javaScript");
+  const [socket, setSocket] = useState(undefined);
+  const [message, setMessage] = React.useState({
+    name: user?.name || "null",
+    email: user?.email || "null",
+    message: "",
+  });
+
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      console.log("scroll to bottom");
+      container.scrollTop = container.scrollHeight;
+    }
+  }, [containerRef]);
+  useEffect(() => {
+    console.log(user);
+    setMessage((state) => ({
+      ...state,
+      name: user?.name,
+      email: user?.email,
+    }));
+  }, [user]);
+
   useEffect(() => {
     const socket = io("http://localhost:4000");
-    socket.on("text", (message) => {
+    socket.emit("joinRoom", room);
+    socket.on("message", (message) => {
       setInbox((state) => [...state, message]);
     });
     setSocket(socket);
@@ -26,13 +52,22 @@ function Chatbox() {
   const handleChange = (event) => {
     setMessage((state) => ({
       ...state,
-      [event.target.name]: event.target.value,
+      // user: user?.name,
+      // email: user?.email,
+      message: event.target.value,
     }));
   };
   const handleSumbit = (event) => {
     event.preventDefault();
+    console.log(user);
+    // setMessage((state) => ({
+    //   ...state,
+    //   name: user?.name,
+    //   email: user?.email,
+    // }));
     console.log(message);
-    socket.emit("text", message.text, room);
+    // socket.emit("text", {room , 'bangladesh'} );
+    socket.emit("text", { room, message });
   };
   return (
     <div className="bg-primary ml-72 min-h-screen grow">
@@ -51,15 +86,42 @@ function Chatbox() {
           <div className="relative h-[90vh]">
             <div className="flex flex-col p-6">
               <div className=" overflow-y-auto">
-                <div className="overflow-y h-[75vh]">
+                <div ref={containerRef} className="overflow-y-auto h-[75vh] ">
                   {inbox?.map((item, key) => {
                     return (
-                      <p
+                      <div
                         key={key}
-                        className="text-sm m-1 bg-primary text-secondery shadow p-2 rounded-xl"
+                        className={`my-4 ${
+                          user?.email === item?.email
+                            ? "text-right border rounded-xl m-2 p-2"
+                            : ""
+                        }`}
                       >
-                        {item}
-                      </p>
+                        <span
+                          className={` rounded-full font-bold ${
+                            user?.email === item?.email
+                              ? "bg-sky-200"
+                              : " bg-green-200"
+                          }`}
+                        >
+                          <span className=" text-slate-800 text-xs p-1.5 opacity-50">
+                            {item?.email?.toLowerCase()}
+                          </span>
+                        </span>
+                        <p className="m-1">
+                          <span
+                            key={key}
+                            className={`text-sm  text-secondery border p-2 rounded-full 
+                            ${
+                              user?.email === item?.email
+                                ? "bg-sky-400 text-white"
+                                : "bg-green-400 text-white"
+                            }`}
+                          >
+                            {item?.message}
+                          </span>
+                        </p>
+                      </div>
                     );
                   })}
                 </div>

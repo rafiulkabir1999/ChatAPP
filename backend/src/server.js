@@ -28,12 +28,17 @@ app.use("/user", userRouter);
 // app.use("/chat", chatRouter);
 
 io.on("connection", (socket) => {
-  socket.on("text", (message, roomname) => {
-    io.to(roomname).emit("text", message);
+  socket.on("text", ({ room, message }) => {
+    io.to(room).emit("message", message);
   });
-  socket.on("joinroom", (roomname) => {
-    console.log("user connected at room", roomname);
-    socket.join(roomname);
+
+  socket.on("joinRoom", (room) => {
+    socket.join(room);
+    console.log(`User joined room: ${room}`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
   });
 });
 
